@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<HTML LANG="EN">
+<?PHP
+$MYSQL_HOST = 'LOCALHOST';
+$MYSQL_USER = 'KAPO';
+$MYSQL_PASSWORD = 'KAPO2016';
+$MYSQL_DB = 'KAPO';
+
+FUNCTION SQL_CONNECT($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME)
+{
+    $RESULT = MYSQL_CONNECT($DB_HOST, $DB_USER, $DB_PASS) OR DIE(MYSQL_ERROR());
+    MYSQL_SELECT_DB($DB_NAME) OR DIE(MYSQL_ERROR());
+    RETURN $RESULT;
+}
+
+@SESSION_START();
+
+$CONNECT = SQL_CONNECT($MYSQL_HOST, $MYSQL_USER, $MYSQL_PASSWORD, $MYSQL_DB);
+HEADER("CONTENT-TYPE: TEXT/HTML; CHARSET=UTF-8");
+?>
+<HTML>
+<HEAD>
+    <META CHARSET="UTF-8">
+    <META HTTP-EQUIV="X-UA-COMPATIBLE" CONTENT="IE=EDGE">
+    <META NAME="VIEWPORT" CONTENT="WIDTH=DEVICE-WIDTH, INITIAL-SCALE=1">
+    <META NAME="DESCRIPTION" CONTENT="">
+    <META NAME="AUTHOR" CONTENT="">
+
+    <TITLE>EASYWARGAME</TITLE>
+    <LINK HREF="CSS/BOOTSTRAP.MIN.CSS" REL="STYLESHEET">
+    <LINK HREF="CSS/SCROLLING-NAV.CSS" REL="STYLESHEET">
+</HEAD>
+<BODY ID="PAGE-TOP" DATA-SPY="SCROLL" DATA-TARGET=".NAVBAR-FIXED-TOP">
+
+    <!-- NAVIGATION -->
+    <NAV CLASS="NAVBAR NAVBAR-DEFAULT NAVBAR-FIXED-TOP" ROLE="NAVIGATION">
+        <DIV CLASS="CONTAINER">
+            <DIV CLASS="NAVBAR-HEADER PAGE-SCROLL">
+                <A CLASS="NAVBAR-BRAND PAGE-SCROLL" HREF="./">EASYWARGAME</A>
+            </DIV>
+			<?PHP IF($_SESSION[ID]){ ?>
+            <DIV CLASS="COLLAPSE NAVBAR-COLLAPSE NAVBAR-EX1-COLLAPSE">
+                <UL CLASS="NAV NAVBAR-NAV">
+                    <LI>
+                        <A CLASS="PAGE-SCROLL" HREF="?PAGE=PROB">PROB</A>
+                    </LI>
+                    <LI>
+                        <A CLASS="PAGE-SCROLL" HREF="?PAGE=AUTH">AUTH</A>
+                    </LI>
+					<LI>
+                        <A CLASS="PAGE-SCROLL" HREF="?PAGE=INFO">INFO</A>
+                    </LI>
+					<LI>
+                        <A CLASS="PAGE-SCROLL" HREF="?PAGE=RANK">RANK</A>
+                    </LI>
+					<LI>
+                        <A CLASS="PAGE-SCROLL" HREF="?PAGE=LOGOUT">LOGOUT</A>
+                    </LI>
+                </UL>
+            </DIV>
+			<?PHP }ELSE{ ?>
+            <DIV CLASS="COLLAPSE NAVBAR-COLLAPSE NAVBAR-EX1-COLLAPSE">
+                <UL CLASS="NAV NAVBAR-NAV">
+                    <LI>
+                        <A CLASS="PAGE-SCROLL" HREF="?PAGE=LOGIN">LOGIN</A>
+                    </LI>
+                    <LI>
+                        <A CLASS="PAGE-SCROLL" HREF="?PAGE=REGISTER">REGISTER</A>
+                    </LI>
+                </UL>
+            </DIV>
+			<?PHP } ?>
+        </DIV>
+    </NAV>
+	<?PHP
+	IF(PREG_MATCH("/CONVERT|BASE64|DATA|UNION|SELECT|FROM|WHERE|SLEEP|BENCH|JOIN|CHAR|INFOR|SCHEMA|COLUMNS|LIKE|#|\)|\(|>|<|,|\*|!|\.\./",IMPLODE($_GET))) EXIT("DETECTED");
+	IF(PREG_MATCH("/CONVERT|BASE64|DATA|UNION|SELECT|FROM|WHERE|SLEEP|BENCH|JOIN|CHAR|INFOR|SCHEMA|COLUMNS|LIKE|#|\)|\(|>|<|,|\*|!|\.\./",IMPLODE($_POST))) EXIT("DETECTED");
+	IF(ISSET($_GET[PAGE])){
+		INCLUDE($_GET[PAGE].".PHP");
+	}ELSE{ ?>
+	<SECTION ID="INTRO" CLASS="INTRO-SECTION">
+        <DIV CLASS="CONTAINER">
+            <DIV CLASS="ROW">
+                <DIV CLASS="COL-LG-12">
+					<CENTER>
+                    <H1>WELCOME TO EASYWARGAME!</H1>
+					<H2>TEST YOUR HACKABILITY.</H2>
+					</CENTER>
+                </DIV>
+            </DIV>
+        </DIV>
+    </SECTION>
+	<?PHP } ?>
+</BODY>
+</HTML>

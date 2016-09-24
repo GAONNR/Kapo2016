@@ -1,0 +1,40 @@
+<?PHP
+	IF(!$_SESSION[ID]){
+		ECHO "<SCRIPT>LOCATION.HREF('?PAGE=LOGIN');</SCRIPT>";
+		EXIT();
+	}
+	$SQL = @MYSQL_FETCH_ARRAY(MYSQL_QUERY("SELECT PW,POINT FROM MEMBER WHERE ID='$_SESSION[ID]'"));
+?>
+	<SECTION ID="INTRO" CLASS="INTRO-SECTION">
+        <DIV CLASS="CONTAINER">
+            <DIV CLASS="ROW">
+                <DIV CLASS="COL-LG-12">
+					<CENTER>
+                    <H1>INFO</H1>
+					<H2><?PHP ECHO $_SESSION[ID]." ".$SQL[POINT]."PTS"; ?></H2>
+					<FORM NAME="F" METHOD="POST" ACTION="?PAGE=INFO">
+                    <P><INPUT CLASS="FORM-CONTROL" STYLE="COLOR:#000;WIDTH:300PX;" PLACEHOLDER="<?PHP ECHO $SQL[PW]; ?>" TYPE="TEXT" NAME="PW" /></P>
+                    <A CLASS="BTN BTN-DEFAULT PAGE-SCROLL" ONCLICK="F.SUBMIT();">CHANGE PW</A>
+					</FORM>
+					<?PHP
+					IF($_POST){
+						IF($_SESSION[ID] == 'ADMIN') EXIT();
+						IF($_POST[PW] == ""){
+							ECHO "<SCRIPT>ALERT('INPUT YOUR PASSWORD.');HISTORY.GO(-1);</SCRIPT>";
+							EXIT();
+						}
+						IF(STRLEN($_POST[PW]) > 32){
+							ECHO "<SCRIPT>ALERT('CAN'T CREATE PASSWORD BIGGER THAN 32 BYTES.');HISTORY.GO(-1);</SCRIPT>";
+							EXIT();
+						}
+						$_POST[PW] = ADDSLASHES($_POST[PW]);
+						$SQL = "UPDATE MEMBER SET PW = '$_POST[PW]' WHERE ID = '$_SESSION[ID]'";
+						$Q = @MYSQL_QUERY($SQL);
+						ECHO "<SCRIPT>ALERT('PW CHANGED.');LOCATION.HREF='?PAGE=INFO';</SCRIPT>";
+					}
+					?>
+					</CENTER>
+                </DIV>
+            </DIV>
+        </DIV>
+    </SECTION>
